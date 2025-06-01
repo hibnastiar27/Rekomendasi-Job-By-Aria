@@ -1,10 +1,7 @@
-# Laporan Proyek Machine Learning - Nama Anda
+# Laporan Proyek Machine Learning - Nur Aria Hibnastiar
 
 ## Project Overview
 
-Pada bagian ini, Kamu perlu menuliskan latar belakang yang relevan dengan proyek yang diangkat.
-
-**Rubrik/Kriteria Tambahan (Opsional)**:
 Pencarian pekerjaan yang sesuai dengan keahlian dan preferensi pengguna merupakan tantangan yang umum dihadapi dalam dunia kerja saat ini. Sistem rekomendasi pekerjaan berbasis konten dapat membantu mengatasi masalah ini dengan memberikan rekomendasi lowongan yang relevan berdasarkan analisis deskripsi pekerjaan dan preferensi pengguna.
 
 Metode content-based filtering menggunakan teknik seperti TF-IDF dan cosine similarity telah terbukti efektif dalam menyaring dan merekomendasikan pekerjaan yang sesuai [1]. Proyek ini bertujuan mengembangkan sistem rekomendasi pekerjaan yang menggabungkan pendekatan content-based filtering dan klasifikasi untuk memprediksi tipe pekerjaan, sehingga meningkatkan akurasi dan personalisasi rekomendasi.
