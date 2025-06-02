@@ -4,39 +4,65 @@
 
 Pencarian pekerjaan yang sesuai dengan keahlian dan preferensi pengguna merupakan tantangan yang umum dihadapi dalam dunia kerja saat ini. Sistem rekomendasi pekerjaan berbasis konten dapat membantu mengatasi masalah ini dengan memberikan rekomendasi lowongan yang relevan berdasarkan analisis deskripsi pekerjaan dan preferensi pengguna.
 
-Metode content-based filtering menggunakan teknik seperti TF-IDF dan cosine similarity telah terbukti efektif dalam menyaring dan merekomendasikan pekerjaan yang sesuai [1]. Proyek ini bertujuan mengembangkan sistem rekomendasi pekerjaan yang menggabungkan pendekatan content-based filtering dan klasifikasi untuk memprediksi tipe pekerjaan, sehingga meningkatkan akurasi dan personalisasi rekomendasi.
-
+Metode content-based filtering menggunakan TF-IDF dan cosine similarity terbukti efektif dalam menyaring dan merekomendasikan pekerjaan yang sesuai [1]. Proyek ini bertujuan membangun sistem rekomendasi pekerjaan yang mampu memberikan rekomendasi relevan dan personal.
 
 ## Business Understanding
 
 ### Problem Statements
 
-* Pencari kerja kesulitan menemukan lowongan yang sesuai dengan keahlian dan preferensi mereka di antara banyaknya pilihan.
-* Tidak ada sistem rekomendasi otomatis yang mampu membantu pencari kerja dengan memberikan lowongan yang relevan secara efektif.
+- Pencari kerja kesulitan menemukan lowongan yang relevan di antara banyak pilihan.
+- Sistem pencarian saat ini belum mampu memberikan rekomendasi pekerjaan secara otomatis dan personal.
 
 ### Goals
 
-* Membangun sistem rekomendasi pekerjaan berbasis konten yang menyajikan lowongan kerja relevan berdasarkan deskripsi pekerjaan dan preferensi pengguna.
-* Mengembangkan model klasifikasi yang dapat memprediksi tipe pekerjaan berdasarkan teks deskripsi untuk memberikan informasi tambahan bagi pengguna.
+- Membangun sistem rekomendasi berbasis konten yang memberikan lowongan relevan berdasarkan deskripsi pekerjaan dan preferensi pengguna.
+- Mengoptimalkan rekomendasi dengan evaluasi metrik relevansi dan cakupan.
+
 
 ### Solution Statements
 
-* Menggunakan content-based filtering dengan TF-IDF dan cosine similarity untuk merekomendasikan pekerjaan yang mirip secara konten.
-* Membangun model klasifikasi Random Forest untuk memprediksi tipe pekerjaan berdasarkan deskripsi pekerjaan.
+- Gunakan content-based filtering dengan TF-IDF dan cosine similarity untuk merekomendasikan pekerjaan yang mirip secara konten.
+- Evaluasi sistem menggunakan metrik Precision@k untuk mengukur relevansi rekomendasi dan Coverage untuk mengukur cakupan sistem.
 
 ## Data Understanding
 
 Dataset yang digunakan berisi **9.981** entri pekerjaan yang merupakan subset dari data asli sekitar 1 juta lebih entri. Data ini telah melalui proses pembersihan, termasuk penghapusan 19 data duplikat sehingga memastikan tidak ada data yang sama secara identik dalam dataset. Selain itu, seluruh fitur pada dataset ini tidak memiliki nilai kosong (null), sehingga kualitas data cukup baik untuk pemodelan.
 
-Dataset ini memiliki 7 fitur utama yang merepresentasikan deskripsi pekerjaan secara komprehensif, yaitu:
+Dataset ini memiliki 23 Fitur sebagai berikut :
 
-* **Job Title**: Judul pekerjaan, seperti “Network Engineer”, “Data Entry Clerk”, dll.
-* **Job Description**: Deskripsi detail mengenai pekerjaan.
-* **skills**: Keterampilan yang diperlukan untuk pekerjaan tersebut.
-* **Responsibilities**: Tanggung jawab utama yang harus dilakukan oleh pemegang pekerjaan.
-* **Qualifications**: Kualifikasi pendidikan atau sertifikasi yang dibutuhkan.
-* **location**: Lokasi pekerjaan tersebut tersedia.
-* **Work Type**: Tipe pekerjaan, misalnya Full-Time, Part-Time, Contract, Temporary, atau Intern.
+1. **Job Id**: ID unik untuk setiap lowongan kerja.
+2. **Experience**: Jumlah tahun pengalaman kerja yang dibutuhkan atau diutamakan.
+3. **Qualifications**: Kualifikasi pendidikan yang diperlukan.
+4. **Salary Range**: Rentang gaji yang ditawarkan.
+5. **Location**: Kota atau area lokasi pekerjaan.
+6. **Country**: Negara tempat pekerjaan berada.
+7. **Latitude**: Koordinat lintang lokasi pekerjaan.
+8. **Longitude**: Koordinat bujur lokasi pekerjaan.
+9. **Work Type**: Jenis pekerjaan (misalnya penuh waktu, paruh waktu, kontrak).
+10. **Company Size**: Ukuran perusahaan perekrut.
+11. **Job Posting Date**: Tanggal lowongan diumumkan.
+12. **Preference**: Preferensi khusus untuk pelamar (misalnya Hanya Pria, Hanya Wanita, atau Keduanya).
+13. **Contact Person**: Nama orang yang dapat dihubungi untuk lowongan tersebut.
+14. **Contact**: Informasi kontak untuk pertanyaan terkait pekerjaan.
+15. **Job Title**: Judul atau posisi pekerjaan yang ditawarkan.
+16. **Role**: Kategori atau peran pekerjaan.
+17. **Job Portal**: Platform atau situs tempat lowongan diunggah.
+18. **Job Description**: Deskripsi rinci tentang tugas dan persyaratan pekerjaan.
+19. **Benefits**: Informasi tentang tunjangan atau manfaat pekerjaan.
+20. **Skills**: Keahlian atau kualifikasi yang dibutuhkan.
+21. **Responsibilities**: Tanggung jawab dan tugas khusus pekerjaan.
+22. **Company Name**: Nama perusahaan perekrut.
+23. **Company Profile**: Ringkasan latar belakang dan misi perusahaan.
+
+dari 23 fitur tersebut akan diambil 7 fitur yang akan digunakan sebagai rekomendasi job :
+
+1. **Job Title**: Judul pekerjaan, seperti “Network Engineer”, “Data Entry Clerk”, dll.
+2. **Job Description**: Deskripsi detail mengenai pekerjaan.
+3. **skills**: Keterampilan yang diperlukan untuk pekerjaan tersebut.
+4. **Responsibilities**: Tanggung jawab utama yang harus dilakukan oleh pemegang pekerjaan.
+5. **Qualifications**: Kualifikasi pendidikan atau sertifikasi yang dibutuhkan.
+6. **location**: Lokasi pekerjaan tersebut tersedia.
+7. **Work Type**: Tipe pekerjaan, misalnya Full-Time, Part-Time, Contract, Temporary, atau Intern.
 
 Dataset ini merupakan representasi pekerjaan dengan variasi lokasi dan tipe kerja yang beragam, serta informasi detail yang dapat dimanfaatkan untuk membangun sistem rekomendasi pekerjaan berbasis konten. Dataset asli dapat diunduh di [Kaggle Job Description Dataset](https://www.kaggle.com/datasets/ravindrasinghrana/job-description-dataset).
 
@@ -44,32 +70,53 @@ Meski belum dilakukan visualisasi eksplorasi data secara mendalam, analisis awal
 
 ## Data Preparation
 
-Tahap persiapan data dimulai dengan penggabungan beberapa kolom teks yang berisi informasi penting seperti keterampilan (`skills`), deskripsi pekerjaan (`Job Description`), tanggung jawab (`Responsibilities`), kualifikasi (`Qualifications`), lokasi (`location`), dan jenis pekerjaan (`Work Type`) menjadi satu kolom gabungan. Penggabungan ini dilakukan agar seluruh informasi relevan dari setiap fitur dapat dianalisis secara terpadu dalam satu sumber data teks.
+Tahapan *data preparation* dilakukan untuk memastikan data yang digunakan dalam pemodelan bersih, relevan, dan siap diproses. Berikut langkah-langkah yang dilakukan:
 
-Selanjutnya dilakukan pembersihan data teks yang meliputi pengubahan seluruh teks menjadi huruf kecil untuk menjaga konsistensi, penghapusan angka yang dianggap tidak relevan, dan penghilangan tanda baca untuk mengurangi gangguan atau noise pada data teks.
+1. **Sampling Data**
+   Dilakukan *sampling* sebanyak 10.000 data secara acak untuk efisiensi proses dan mengurangi beban komputasi.
 
-Untuk target prediksi yaitu jenis pekerjaan (`Work Type`), dilakukan transformasi label kategorikal ke bentuk numerik menggunakan teknik encoding sehingga dapat diproses oleh algoritma pembelajaran mesin.
+2. **Seleksi Fitur**
+   Mengacu pada data understanding diatas yaitu hanya dipilih 7 fitur yang relevan: `Job Title`, `Job Description`, `skills`, `Responsibilities`, `Qualifications`, `location`, dan `Work Type`.
 
-Representasi teks hasil pembersihan tersebut kemudian diubah menjadi bentuk numerik menggunakan metode TF-IDF (Term Frequency-Inverse Document Frequency). Dalam proses ini, digunakan pengaturan `max_features` sebanyak 10.000 fitur. Artinya, model hanya mengambil 10.000 kata atau token paling signifikan (berdasarkan bobot TF-IDF tertinggi) dari seluruh korpus teks. Pembatasan fitur ini bertujuan untuk mengurangi kompleksitas model sekaligus menghilangkan kata-kata yang kurang penting atau sangat jarang muncul, sehingga mempercepat proses pelatihan dan mengurangi risiko overfitting.
+3. **Menghapus Duplikat dan Nilai Kosong**
+   Data duplikat dan baris yang memiliki nilai kosong dihapus agar hasil pemodelan lebih akurat dan bersih.
 
-Metode TF-IDF ini efektif dalam mengekstraksi fitur dari data teks sehingga model dapat mengenali pola-pola penting. Selanjutnya, dihitung matriks kemiripan (similarity) antar data menggunakan cosine similarity yang menjadi dasar dalam membangun sistem rekomendasi pekerjaan berbasis kesamaan konten.
+4. **Penggabungan Kolom Teks**
+   Beberapa kolom teks seperti `Job Description`, `skills`, `Responsibilities`, `Qualifications`, `location`, dan `Work Type` digabungkan menjadi satu kolom teks gabungan. Tujuannya agar seluruh informasi penting dari pekerjaan tersedia dalam satu representasi.
 
-Seluruh proses persiapan ini bertujuan untuk memastikan data yang digunakan bersih, konsisten, dan memiliki representasi fitur yang tepat agar hasil pemodelan dan rekomendasi dapat optimal.
+5. **Pembersihan Teks**
+   Teks dibersihkan dengan mengubah huruf menjadi kecil, menghapus angka, dan menghilangkan tanda baca untuk menjaga konsistensi dan mengurangi noise.
+
+6. **Ekstraksi Fitur dengan TF-IDF**
+   Data teks yang telah dibersihkan diubah menjadi representasi numerik menggunakan metode **TF-IDF (Term Frequency-Inverse Document Frequency)**.
+   Penggunaan TF-IDF bertujuan untuk menangkap kata-kata penting dalam dokumen dan membantu model mengenali pola dalam data teks.
+   Parameter `max_features=10000` digunakan untuk mempertahankan kata-kata paling informatif.
 
 ## Modeling
 
+Pada proyek ini, sistem rekomendasi pekerjaan dikembangkan menggunakan pendekatan **Content-Based Filtering**, yang memanfaatkan deskripsi dan konten pekerjaan untuk menghasilkan rekomendasi serupa. Pendekatan ini tidak memerlukan data historis pengguna, melainkan hanya menggunakan informasi dari masing-masing lowongan kerja itu sendiri.
 
-Pada proyek ini, sistem rekomendasi pekerjaan dibangun menggunakan dua pendekatan utama: content-based filtering dan klasifikasi Work Type. Kedua metode ini bertujuan memberikan rekomendasi pekerjaan yang relevan berdasarkan deskripsi pekerjaan dan fitur terkait lainnya.
+### Content-Based Filtering
 
-### 1. Content-Based Filtering
+#### 1. **Representasi Teks**
 
-Pendekatan pertama menggunakan teknik content-based filtering dengan memanfaatkan TF-IDF vectorization dan cosine similarity untuk mengukur kemiripan antar deskripsi pekerjaan.
+Beberapa kolom penting seperti `Job Description`, `skills`, `Responsibilities`, `Qualifications`, `location`, dan `Work Type` digabungkan menjadi satu kolom `combined_text`. Setelah dibersihkan, teks diubah menjadi representasi numerik menggunakan metode **TF-IDF (Term Frequency-Inverse Document Frequency)** dengan maksimal 10.000 fitur. Proses ini dijelaskan pada bagian *Data Preparation*.
 
-* **TF-IDF Vectorization**: Semua informasi terkait pekerjaan yang relevan, seperti skills, deskripsi pekerjaan, tanggung jawab, kualifikasi, lokasi, dan jenis pekerjaan, digabungkan menjadi satu kolom teks bernama `combined_text`. Kemudian, TF-IDF Vectorizer digunakan untuk mengubah teks ini menjadi representasi numerik dengan fitur maksimal sebanyak 10.000 untuk menangkap konteks dan bobot kata penting dalam data.
-* **Cosine Similarity**: Matriks TF-IDF digunakan untuk menghitung kemiripan antar pekerjaan berdasarkan sudut cosine antara vektor TF-IDF mereka.
-* **Rekomendasi**: Ketika pengguna memasukkan job title, sistem akan mencari pekerjaan dengan judul yang mengandung kata kunci tersebut. Setelah menemukan pekerjaan yang cocok, sistem menghitung skor kemiripan dengan semua pekerjaan lain dan mengembalikan rekomendasi Top-N pekerjaan yang paling mirip, lengkap dengan informasi lokasi, jenis pekerjaan, dan persentase kemiripan.
+#### 2. **Cosine Similarity**
 
-Sebagai contoh, input `Software Engine` menghasilkan rekomendasi seperti berikut:
+Setelah teks diubah menjadi matriks TF-IDF, dihitung **cosine similarity** antar pekerjaan. Cosine similarity mengukur sejauh mana dua pekerjaan mirip berdasarkan arah vektor TF-IDF mereka. Semakin besar nilai cosine similarity (mendekati 1), semakin mirip kontennya.
+
+#### 3. **Fungsi Rekomendasi**
+
+Saat pengguna memasukkan kata kunci dalam *job title*, sistem:
+
+* Mencari pekerjaan dengan judul yang cocok (mengandung kata kunci).
+* Menghitung skor kemiripan antara pekerjaan tersebut dengan seluruh pekerjaan lain.
+* Mengembalikan **Top-N rekomendasi** dengan skor kemiripan tertinggi, beserta informasi lokasi dan jenis pekerjaan.
+
+#### Contoh penggunaan rekomendasi
+
+Jika pengguna mencari dengan kata kunci `Software Engine`, sistem mengembalikan hasil seperti:
 
 | Job Title         | Location | Work Type | Similarity (%) |
 | ----------------- | -------- | --------- | -------------- |
@@ -79,102 +126,61 @@ Sebagai contoh, input `Software Engine` menghasilkan rekomendasi seperti berikut
 | Software Engineer | Belgrade | Part-Time | 97.57          |
 | Software Engineer | Prague   | Part-Time | 97.56          |
 
-**Kelebihan**:
+### Kelebihan:
 
-* Memberikan rekomendasi berdasarkan konten deskriptif pekerjaan secara langsung.
-* Mudah dipahami dan diimplementasikan.
-* Tidak memerlukan data historis pengguna.
+* Memberikan rekomendasi berdasarkan isi deskripsi pekerjaan secara langsung.
+* Tidak membutuhkan data pengguna (cocok untuk cold-start pada user).
+* Sederhana, transparan, dan mudah diimplementasikan.
 
-**Kekurangan**:
+### Kekurangan:
 
-* Sensitif terhadap kualitas teks yang ada; kata-kata umum bisa mempengaruhi hasil.
-* Tidak memperhitungkan preferensi pengguna secara eksplisit selain input job title.
-* Kurang efektif untuk menangani cold-start jika deskripsi kurang informatif.
-
----
-
-### 2. Klasifikasi Work Type Berdasarkan Konten Pekerjaan
-
-Pendekatan kedua adalah membangun model klasifikasi untuk memprediksi jenis pekerjaan (`Work Type`) berdasarkan deskripsi gabungan (`combined_text`).
-
-* **Data Split**: Data dibagi menjadi data latih (80%) dan data uji (20%) untuk validasi model.
-* **Pipeline Model**: Pipeline terdiri dari TF-IDF Vectorizer (dengan maksimal fitur 10.000 dan stop words bahasa Inggris) dan Random Forest Classifier (50 estimator, random state=27).
-* **Pelatihan Model**: Pipeline ini dilatih untuk mengklasifikasikan jenis pekerjaan ke dalam kategori seperti Full-Time, Part-Time, Contract, Intern, Temporary, dan lainnya.
-
-Model klasifikasi ini dapat digunakan untuk mengkategorikan pekerjaan baru yang belum memiliki label `Work Type`, sehingga membantu dalam memfilter dan memberikan rekomendasi yang lebih spesifik berdasarkan jenis pekerjaan yang diinginkan oleh pengguna.
-
-**Kelebihan**:
-
-* Mampu mengotomasi pengklasifikasian jenis pekerjaan berdasarkan deskripsi secara akurat.
-* Dapat meningkatkan personalisasi rekomendasi dengan memfilter berdasarkan jenis pekerjaan.
-* Random Forest cukup tangguh terhadap overfitting dan dapat menangani fitur TF-IDF yang sparse.
-
-**Kekurangan**:
-
-* Membutuhkan data berlabel yang cukup untuk pelatihan.
-* Model klasifikasi tidak langsung menghasilkan rekomendasi pekerjaan, melainkan sebagai fitur pendukung.
-* Kinerja model bergantung pada kualitas dan keberagaman data latih.
+* Hanya mempertimbangkan konten pekerjaan, tidak mempertimbangkan preferensi pengguna personal.
+* Sensitif terhadap deskripsi yang kurang informatif atau tidak konsisten.
+* Tidak mempertimbangkan popularitas atau interaksi historis.
 
 ---
-
-### Output Sistem Rekomendasi
-
-Sistem utama menggunakan content-based filtering untuk memberikan rekomendasi pekerjaan Top-N dengan tingkat kemiripan tertinggi berdasarkan input job title pengguna. Klasifikasi jenis pekerjaan menjadi komponen tambahan yang memungkinkan penyaringan rekomendasi lebih lanjut sesuai preferensi pengguna terkait jenis pekerjaan.
 
 ## Evaluation
 
-Dalam proyek ini, evaluasi performa model klasifikasi jenis pekerjaan (`Work Type`) dilakukan menggunakan beberapa metrik utama, yaitu **akurasi (accuracy)**, **precision**, **recall**, dan **f1-score**. Metrik-metrik ini dipilih karena mampu memberikan gambaran menyeluruh mengenai kualitas prediksi model dalam konteks klasifikasi multi-kelas.
+Evaluasi sistem rekomendasi pekerjaan ini dilakukan dengan fokus pada kualitas rekomendasi yang diberikan menggunakan dua metrik utama, yaitu **Precision\@k** dan **Coverage**. Metrik-metrik ini dipilih karena sesuai untuk mengukur efektivitas sistem rekomendasi dalam konteks *information retrieval* dan relevansi hasil rekomendasi.
 
 ### Metrik Evaluasi
 
-1. **Akurasi (Accuracy)**
-   Akurasi mengukur proporsi prediksi yang benar dari keseluruhan sampel.
+1. **Precision\@k**
+   Precision\@k mengukur proporsi pekerjaan yang relevan di antara *k* rekomendasi teratas yang diberikan oleh sistem.
+   Rumusnya:
 
-   $$\text{Accuracy} = \frac{\text{Jumlah prediksi benar}}{\text{Total data uji}}$$
+   $$\text{Precision@k} = \frac{\text{Jumlah rekomendasi relevan dalam k teratas}}{k}$$
 
-   Metrik ini memberikan gambaran umum performa model, namun kurang sensitif pada ketidakseimbangan kelas.
+   Metrik ini menilai ketepatan rekomendasi yang disajikan kepada pengguna, dimana nilai lebih tinggi menunjukkan relevansi yang lebih baik.
 
-2. **Precision**
-   Precision mengukur ketepatan prediksi positif untuk masing-masing kelas, yaitu rasio prediksi positif yang benar-benar relevan:
+2. **Coverage**
+   Coverage mengukur proporsi query pencarian pekerjaan yang berhasil diberikan rekomendasi oleh sistem dari seluruh query yang diuji.
+   Rumusnya:
 
-   $$\text{Precision} = \frac{TP}{TP + FP}$$
+   $$\text{Coverage} = \frac{\text{Jumlah query dengan rekomendasi valid}}{\text{Total query}} \times 100\%$$
 
-   Di mana $TP$ adalah True Positives dan $FP$ adalah False Positives.
-
-3. **Recall**
-   Recall mengukur kemampuan model dalam menangkap seluruh instance positif sebenarnya:
-
-   $$\text{Recall} = \frac{TP}{TP + FN}$$
-
-   Di mana $FN$ adalah False Negatives.
-
-4. **F1-Score**
-   F1-score merupakan rata-rata harmonis dari precision dan recall, memberikan keseimbangan antara keduanya:
-
-   $$F1 = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$$
-
-
-### Metrics Classification Report (Test Set)
-
-| Class     | Precision | Recall | F1-score | Support |
-| --------- | --------- | ------ | -------- | ------- |
-| Contract  | 1.00      | 1.00   | 1.00     | 432     |
-| Full-Time | 0.99      | 1.00   | 1.00     | 398     |
-| Intern    | 1.00      | 1.00   | 1.00     | 409     |
-| Part-Time | 1.00      | 1.00   | 1.00     | 365     |
-| Temporary | 1.00      | 1.00   | 1.00     | 393     |
-
-* **Overall Accuracy:** 99.85%
-* Model menunjukkan performa sangat baik untuk klasifikasi jenis pekerjaan berdasarkan teks deskriptif.
+   Metrik ini menilai sejauh mana sistem mampu memberikan rekomendasi untuk berbagai jenis pekerjaan yang dicari pengguna.
 
 ### Hasil Evaluasi
 
-Model Random Forest yang dilatih dengan fitur teks hasil TF-IDF mencapai akurasi **99.85%** pada data uji sebanyak 1.997 contoh. Classification report menunjukkan nilai precision, recall, dan f1-score yang mendekati 1 pada semua kelas `Work Type` (Contract, Full-Time, Intern, Part-Time, Temporary), yang menandakan performa model yang sangat baik dan seimbang di setiap kategori.
+| Query             | Precision\@5    |
+| ----------------- | --------------- |
+| software engineer | 1.00            |
+| data analyst      | 1.00            |
+| marketing manager | 1.00            |
+| project manager   | 1.00            |
+| data scientist    | 0.00            |
+| ui/ux             | Tidak ditemukan |
+
+* **Rata-rata Precision\@5:** 0.66 dimana ui/ux diikut sertakan dan dinilai 0
+* **Coverage:** 83.33%
+
+Sistem mampu memberikan rekomendasi relevan dengan nilai Precision\@5 1.00 untuk sebagian besar query populer, menunjukkan akurasi tinggi dalam menampilkan pekerjaan terkait. Namun, untuk query seperti "ui/ux" dan "data scientist", sistem belum memberikan hasil rekomendasi yang memadai, sehingga menurunkan nilai precision dan coverage.
 
 ### Kesimpulan
 
-Metrik evaluasi yang tinggi membuktikan bahwa model ini efektif dalam mengklasifikasikan jenis pekerjaan berdasarkan deskripsi pekerjaan dan atribut terkait. Oleh karena itu, model sangat layak digunakan sebagai bagian dari sistem rekomendasi pekerjaan yang akurat dan responsif terhadap preferensi pengguna.
-
+Model rekomendasi pekerjaan berbasis content-based filtering ini telah berhasil memberikan rekomendasi yang relevan dengan tingkat akurasi tinggi untuk sebagian besar query. Coverage sebesar 83.33% menunjukkan bahwa sistem cukup luas dalam menyediakan rekomendasi untuk berbagai jenis pekerjaan. Meskipun demikian, ada ruang perbaikan terutama pada jenis pekerjaan dengan data lebih terbatas atau query yang kurang tepat, yang dapat menjadi fokus pengembangan selanjutnya untuk meningkatkan cakupan dan akurasi rekomendasi.
 
 ## Referensi:
 
