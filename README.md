@@ -173,7 +173,7 @@ Evaluasi sistem rekomendasi pekerjaan ini dilakukan dengan fokus pada kualitas r
 | data scientist    | 0.00            |
 | ui/ux             | Tidak ditemukan |
 
-* **Rata-rata Precision\@5:** 0.66 dimana ui/ux diikut sertakan dan dinilai 0
+* **Rata-rata Precision\@5:** 0.80
 * **Coverage:** 83.33%
 
 Sistem mampu memberikan rekomendasi relevan dengan nilai Precision\@5 1.00 untuk sebagian besar query populer, menunjukkan akurasi tinggi dalam menampilkan pekerjaan terkait. Namun, untuk query seperti "ui/ux" dan "data scientist", sistem belum memberikan hasil rekomendasi yang memadai, sehingga menurunkan nilai precision dan coverage.
